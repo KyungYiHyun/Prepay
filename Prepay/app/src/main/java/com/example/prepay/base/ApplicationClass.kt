@@ -21,6 +21,7 @@ class ApplicationClass : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        sharedPreferencesUtil = SharedPreferencesUtil(applicationContext)
         // 앱이 처음 생성되는 순간, retrofit 인스턴스를 생성
 
         val okHttpClient = OkHttpClient.Builder()

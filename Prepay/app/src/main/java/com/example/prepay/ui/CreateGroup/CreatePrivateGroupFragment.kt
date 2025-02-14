@@ -15,7 +15,6 @@ import com.example.prepay.BaseFragment
 import com.example.prepay.CommonUtils
 import com.example.prepay.R
 import com.example.prepay.RetrofitUtil
-import com.example.prepay.SharedPreferencesUtil
 import com.example.prepay.data.model.dto.PublicPrivateTeam
 import com.example.prepay.databinding.FragmentCreatePrivateGroupBinding
 import com.example.prepay.ui.MainActivity
@@ -135,9 +134,10 @@ class CreatePrivateGroupFragment: BaseFragment<FragmentCreatePrivateGroupBinding
         lifecycleScope.launch {
             try {
                 binding.privateRegisterBtn.isEnabled = false
+                val header: String = "1"
 
                 val response = withContext(Dispatchers.IO) {
-                    RetrofitUtil.teamService.makeTeam(SharedPreferencesUtil.getAccessToken()!!, teamMakeRequest, null)
+                    RetrofitUtil.teamService.makeTeam(header, teamMakeRequest, null)
                 }
                 Log.d(TAG, "makeTeam: 성공")
 

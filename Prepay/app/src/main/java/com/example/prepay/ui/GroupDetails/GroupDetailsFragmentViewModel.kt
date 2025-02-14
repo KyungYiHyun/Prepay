@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.prepay.RetrofitUtil
-import com.example.prepay.SharedPreferencesUtil
 import com.example.prepay.data.model.dto.Restaurant
 import com.example.prepay.data.response.BanUserReq
 import com.example.prepay.data.response.StoreIdReq
@@ -54,10 +53,10 @@ class GroupDetailsFragmentViewModel : ViewModel() {
     fun updatePosition(userposition: Boolean){
         _userposition.value = userposition
     }
-    fun getMyTeamRestaurantList(access:String,teamId: Long) {
+    fun getMyTeamRestaurantList(userId:Long,teamId: Long) {
         viewModelScope.launch {
             runCatching {
-                RetrofitUtil.teamService.getStoreOfTeam(access,teamId)
+                RetrofitUtil.teamService.getStoreOfTeam(userId,teamId)
             }.onSuccess {
                 Log.d("getMyTeam", "팀 리스트 가져오기 성공: $it")
                 _storeListInfo.value = it
@@ -67,10 +66,10 @@ class GroupDetailsFragmentViewModel : ViewModel() {
         }
     }
 
-    fun TeamResign(access:String,ban: BanUserReq){
+    fun TeamResign(ban: BanUserReq){
         viewModelScope.launch {
             kotlin.runCatching {
-                RetrofitUtil.teamService.banUser(access,ban)
+                RetrofitUtil.teamService.banUser(1,ban)
             }.onSuccess {
                 val currentList = _teamUserListInfo.value?.toMutableList() ?: mutableListOf()
                 val updatedList = currentList.filter { it.email != ban.banUserEmail } // 삭제된 사용자를 제외한 리스트
@@ -81,10 +80,10 @@ class GroupDetailsFragmentViewModel : ViewModel() {
         }
     }
 
-    fun getMyTeamUserList(access:String,teamId: Long) {
+    fun getMyTeamUserList(userId:Long,teamId: Long) {
         viewModelScope.launch {
             runCatching {
-                RetrofitUtil.teamService.getUserOfTeam(access, teamId)
+                RetrofitUtil.teamService.getUserOfTeam(userId, teamId)
             }.onSuccess {
                 Log.d("getMyTeam", "팀 리스트 가져오기 성공: $it")
                 _teamUserListInfo.value = it
@@ -93,10 +92,10 @@ class GroupDetailsFragmentViewModel : ViewModel() {
             }
         }
     }
-    fun getStoreId(access:String,storeReq : StoreIdReq) {
+    fun getStoreId(storeReq : StoreIdReq) {
         viewModelScope.launch {
             runCatching {
-                RetrofitUtil.storeService.getStores(storeReq, access)
+                RetrofitUtil.storeService.getStores(storeReq, "user1@gmail.com")
             } .onSuccess {
                 Log.d("StoreId", "스토어 값들 가져오기 성공: $it")
                 _storesListInfo.value = it

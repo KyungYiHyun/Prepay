@@ -1,6 +1,5 @@
 package com.example.prepay.data.remote
 
-import com.example.prepay.data.response.LoginResponse
 import com.example.prepay.response.LoginRequest
 import com.example.prepay.response.SignupRequest
 import com.example.prepay.response.SignupResponse
@@ -18,7 +17,7 @@ interface UserService {
     suspend fun signup(@Body request: SignupRequest): Response<SignupResponse>
 
     @POST("user/login")
-    suspend fun login(@Body request: LoginRequest) :Response<LoginResponse>
+    suspend fun login(@Body request: LoginRequest)
 
     @GET("/user/kakao/login/{code}")
     suspend fun kakaoLogin(
