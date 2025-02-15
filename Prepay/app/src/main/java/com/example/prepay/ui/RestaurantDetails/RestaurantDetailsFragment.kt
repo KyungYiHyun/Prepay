@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.prepay.BaseFragment
 import com.example.prepay.CommonUtils
 import com.example.prepay.R
-import com.example.prepay.SharedPreferencesUtil
 import com.example.prepay.data.model.dto.OrderHistory
 import com.example.prepay.databinding.DialogReceiptBinding
 import com.example.prepay.databinding.FragmentRestaurantDetailsBinding
@@ -85,7 +84,7 @@ class RestaurantDetailsFragment: BaseFragment<FragmentRestaurantDetailsBinding>(
         activityViewModel.teamId.value?.let {
             activityViewModel.storeId.value?.let { it1 ->
                 Log.d(TAG, "getAllOrderHistoryList: $it, $it1")
-                orderHistoryViewModel.getAllOrderHistoryList(SharedPreferencesUtil.getAccessToken()!!,
+                orderHistoryViewModel.getAllOrderHistoryList(1,
                     it, it1.toInt()
                 )
             }
@@ -114,7 +113,7 @@ class RestaurantDetailsFragment: BaseFragment<FragmentRestaurantDetailsBinding>(
                     receiptHistoryAdapter.notifyDataSetChanged()
                 }
                 Log.d(TAG, "onClick: $orderHistoryId")
-                receiptViewModel.getAllReceiptList(orderHistoryId,SharedPreferencesUtil.getAccessToken()!!)
+                receiptViewModel.getAllReceiptList(orderHistoryId,1)
 
                 dialogBinding.recyclerView.layoutManager = LinearLayoutManager(itemView.context)
                 dialogBinding.useName.text = order.orderHistoryId.toString()

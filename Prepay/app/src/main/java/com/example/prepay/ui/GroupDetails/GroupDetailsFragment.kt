@@ -32,7 +32,6 @@ import com.example.prepay.CommonUtils
 import com.example.prepay.PermissionChecker
 import com.example.prepay.R
 import com.example.prepay.RetrofitUtil
-import com.example.prepay.SharedPreferencesUtil
 import com.example.prepay.data.model.dto.RestaurantData
 import com.example.prepay.data.response.BanUserReq
 import com.example.prepay.data.response.MoneyChangeReq
@@ -198,8 +197,8 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
             teamUserAdapter.userposition = it
             teamUserAdapter.notifyDataSetChanged()
         }
-        viewModel.getMyTeamRestaurantList(SharedPreferencesUtil.getAccessToken()!!,activityViewModel.teamId.value!!)
-        viewModel.getMyTeamUserList(SharedPreferencesUtil.getAccessToken()!!,activityViewModel.teamId.value!!);
+        viewModel.getMyTeamRestaurantList(1,activityViewModel.teamId.value!!)
+        viewModel.getMyTeamUserList(1,activityViewModel.teamId.value!!);
 
         viewModel.userLocation.observe(viewLifecycleOwner) { curlocation ->
             // 위치 정보가 변경될 때마다 호출
@@ -225,7 +224,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
         binding.diningTogetherQrBtn.setOnClickListener {
             lifecycleScope.launch {
                 runCatching {
-                    RetrofitUtil.qrService.qrTeamCreate(SharedPreferencesUtil.getAccessToken()!!,activityViewModel.teamId.value!!.toInt())
+                    RetrofitUtil.qrService.qrTeamCreate("user1@gmail.com",1)
                 }.onSuccess {
                     Log.d(TAG,it.message)
                     showQRDialog(it.message)
@@ -251,10 +250,10 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
         binding.qrBtn.setOnClickListener {
             lifecycleScope.launch {
                 runCatching {
-                    RetrofitUtil.qrService.qrPrivateCreate(SharedPreferencesUtil.getAccessToken()!!,activityViewModel.teamId.value!!.toInt())
+                    RetrofitUtil.qrService.qrPrivateCreate("user1@gmail.com",activityViewModel.teamId.value!!.toInt())
                 }.onSuccess {
                     Log.d(TAG,it.message)
-                    showQRDialog(it.message+":"+SharedPreferencesUtil.getAccessToken()!!+":"+activityViewModel.teamId.value.toString())
+                    showQRDialog(it.message+":"+"user1@gmail.com"+":"+activityViewModel.teamId.value.toString())
                 }.onFailure {
                     mainActivity.showToast("qr불러오기가 실패했습니다")
                 }
@@ -266,7 +265,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
     fun changeMoneyView(){
         lifecycleScope.launch {
             kotlin.runCatching {
-                RetrofitUtil.teamService.getTeamDetails(SharedPreferencesUtil.getAccessToken()!!, activityViewModel.teamId.value!!)
+                RetrofitUtil.teamService.getTeamDetails(1, activityViewModel.teamId.value!!)
             }.onSuccess {
                 Log.d(TAG,"얼마 사용"+it.dailyPriceLimit+" "+it.usedAmount)
                 binding.usePossiblePriceTxt.text = CommonUtils.makeComma(viewModel.moneyValue.value!!.toInt() - it.usedAmount)
@@ -283,7 +282,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
     fun initialView(){
         lifecycleScope.launch{
             kotlin.runCatching {
-                RetrofitUtil.teamService.getTeamDetails(SharedPreferencesUtil.getAccessToken()!!,activityViewModel.teamId.value!!)
+                RetrofitUtil.teamService.getTeamDetails(1,activityViewModel.teamId.value!!)
             }.onSuccess {
                 binding.usePossiblePriceTxt.text = CommonUtils.makeComma(it.dailyPriceLimit-it.usedAmount)
                 viewModel.updatePosition(it.position)
@@ -455,7 +454,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
             .create()
         binding.groupResignConfirmBtn.setOnClickListener {
             val banUser = BanUserReq(ban.email,ban.teamId)
-            viewModel.TeamResign(SharedPreferencesUtil.getAccessToken()!!,banUser)
+            viewModel.TeamResign(banUser)
             dialog.dismiss()
         }
 
@@ -487,7 +486,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
     fun moneyChange(moneychange: MoneyChangeReq){
         lifecycleScope.launch {
             runCatching {
-                RetrofitUtil.teamService.moneyChange(SharedPreferencesUtil.getAccessToken()!!,moneychange)
+                RetrofitUtil.teamService.moneyChange(1,moneychange)
             }.onSuccess {
 
             }.onFailure {
@@ -499,7 +498,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
     fun privilegeUser(pr:PrivilegeUserReq){
         lifecycleScope.launch {
             runCatching {
-              RetrofitUtil.teamService.privilegeUser(SharedPreferencesUtil.getAccessToken()!!,pr)
+              RetrofitUtil.teamService.privilegeUser(1,pr)
             }.onSuccess {
 
             }.onFailure {
@@ -511,7 +510,7 @@ class GroupDetailsFragment: BaseFragment<FragmentGroupDetailsBinding>(
     fun exitTeam(tr: TeamIdReq){
         lifecycleScope.launch {
             runCatching {
-                RetrofitUtil.teamService.exitTeam(SharedPreferencesUtil.getAccessToken()!!,tr)
+                RetrofitUtil.teamService.exitTeam(1,tr)
             }.onSuccess {
 
             }.onFailure {

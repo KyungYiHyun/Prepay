@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +21,6 @@ import com.example.prepay.BaseFragment
 import com.example.prepay.CommonUtils
 import com.example.prepay.R
 import com.example.prepay.RetrofitUtil
-import com.example.prepay.SharedPreferencesUtil
 import com.example.prepay.data.response.BootPayChargeReq
 import com.example.prepay.data.model.dto.PublicPrivateTeam
 import com.example.prepay.data.model.dto.Restaurant
@@ -78,7 +76,7 @@ class CreatePublicGroupFragment : BaseFragment<FragmentCreatePublicGroupBinding>
             binding.textInputText
         )
         binding.searchResults.visibility = View.GONE
-        groupDetailsFragmentViewModel.getStoreId(SharedPreferencesUtil.getAccessToken()!!,StoreIdReq(0.0,0.0, 1))
+        groupDetailsFragmentViewModel.getStoreId(StoreIdReq(0.0,0.0, 1))
         initRecyclerView()
         setOnQueryTextListener()
         initEvent()
@@ -195,7 +193,7 @@ class CreatePublicGroupFragment : BaseFragment<FragmentCreatePublicGroupBinding>
                 val request = TeamStoreReq(storeId, teamId, priceText.toInt())
                 Log.d(TAG, "selectedImageMultipart: $selectedImageMultipart")
                 val response = withContext(Dispatchers.IO) {
-                    RetrofitUtil.teamService.createStore(SharedPreferencesUtil.getAccessToken()!!, request, selectedImageMultipart)
+                    RetrofitUtil.teamService.createStore(1, request, selectedImageMultipart)
                 }
 
                 Log.d(TAG, "response: $response")
