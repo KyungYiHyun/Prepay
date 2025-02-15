@@ -35,7 +35,6 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(
     }
 
     private fun initAdapter() {
-
         notificationAdapter = NotificationAdapter(arrayListOf())
         binding.rvUsageHistory.adapter = notificationAdapter
         binding.rvUsageHistory.layoutManager = LinearLayoutManager(requireContext())
@@ -44,6 +43,4 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(
             notificationAdapter.notifyDataSetChanged()
         }
     }
-
-
 }
