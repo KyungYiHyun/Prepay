@@ -3,6 +3,7 @@ package com.example.prepay.ui.Notification
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.prepay.BaseFragment
 import com.example.prepay.R
 import com.example.prepay.databinding.FragmentNotificationBinding
@@ -28,11 +29,11 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(
         initAdapter()
     }
     private fun initEvent() {
-        TODO("Not yet implemented")
+
     }
 
     private fun initAdapter() {
-
+        binding.rvUsageHistory.layoutManager = LinearLayoutManager(requireContext())
         notificationAdapter = NotificationAdapter(arrayListOf())
         binding.rvUsageHistory.adapter = notificationAdapter
         viewModel.myOrderHistoryList.observe(viewLifecycleOwner) {
