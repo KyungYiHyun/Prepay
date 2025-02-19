@@ -624,8 +624,10 @@ public class TeamService {
                 }
             }
         }
+        List<PublicTeams2kmRes> sortedByDistanceResult = result.stream()
+                .sorted(Comparator.comparingDouble(item -> item.getDistance())).toList();
         log.info("리스트 사이즈 : {}", result.size());
-        return result;
+        return sortedByDistanceResult;
     }
 
     public PrivateStoreDetail getPrivateDetail(String email, long teamId, long storeId) {
